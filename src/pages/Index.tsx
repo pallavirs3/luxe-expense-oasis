@@ -1,48 +1,24 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '../contexts/ThemeContext';
-import { AuthProvider } from '../contexts/AuthContext';
-import Login from '../components/auth/Login';
-import Signup from '../components/auth/Signup';
-import Dashboard from '../components/dashboard/Dashboard';
-import ExpenseHistory from '../components/expenses/ExpenseHistory';
-import Analytics from '../components/analytics/Analytics';
-import Reminders from '../components/reminders/Reminders';
-import Settings from '../components/settings/Settings';
-import AdminPanel from '../components/admin/AdminPanel';
-import Layout from '../components/layout/Layout';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 const Index = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen transition-colors duration-300">
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/*" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/expenses" element={<ExpenseHistory />} />
-                      <Route path="/analytics" element={<Analytics />} />
-                      <Route path="/reminders" element={<Reminders />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/admin" element={<AdminPanel />} />
-                    </Routes>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </div>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+          Welcome to ExpenseTracker
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400 mb-8">
+          Your professional expense management solution
+        </p>
+        <a 
+          href="/login" 
+          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+        >
+          Get Started
+        </a>
+      </div>
+    </div>
   );
 };
 
