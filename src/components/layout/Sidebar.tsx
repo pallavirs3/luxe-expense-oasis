@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   DollarSign, 
   Calendar, 
-  Chart, 
+  BarChart3, 
   Bell, 
   Settings, 
   Users,
@@ -19,7 +18,7 @@ const Sidebar = () => {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: DollarSign },
     { name: 'Expenses', href: '/expenses', icon: Calendar },
-    { name: 'Analytics', href: '/analytics', icon: Chart },
+    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Reminders', href: '/reminders', icon: Bell },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
