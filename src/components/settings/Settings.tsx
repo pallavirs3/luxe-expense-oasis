@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,8 +11,8 @@ const Settings = () => {
     name: user?.name || '',
     email: user?.email || '',
     phone: '',
-    currency: 'USD',
-    timezone: 'UTC-5'
+    currency: 'INR',
+    timezone: 'UTC+5:30'
   });
 
   const [notifications, setNotifications] = useState({
@@ -92,7 +91,7 @@ const Settings = () => {
                     type="tel"
                     value={profile.phone}
                     onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+91 98765 43210"
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -105,10 +104,10 @@ const Settings = () => {
                     onChange={(e) => setProfile({ ...profile, currency: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
+                    <option value="INR">INR - Indian Rupee</option>
                     <option value="USD">USD - US Dollar</option>
                     <option value="EUR">EUR - Euro</option>
                     <option value="GBP">GBP - British Pound</option>
-                    <option value="CAD">CAD - Canadian Dollar</option>
                   </select>
                 </div>
               </div>

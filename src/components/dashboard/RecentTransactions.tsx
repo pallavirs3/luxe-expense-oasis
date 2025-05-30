@@ -7,7 +7,7 @@ const RecentTransactions = () => {
     {
       id: 1,
       description: 'Grocery Shopping',
-      amount: -125.50,
+      amount: -10400.50,
       category: 'Food & Dining',
       date: '2024-05-29',
       type: 'expense'
@@ -15,7 +15,7 @@ const RecentTransactions = () => {
     {
       id: 2,
       description: 'Salary Deposit',
-      amount: 4200.00,
+      amount: 348600.00,
       category: 'Income',
       date: '2024-05-28',
       type: 'income'
@@ -23,15 +23,15 @@ const RecentTransactions = () => {
     {
       id: 3,
       description: 'Netflix Subscription',
-      amount: -15.99,
+      amount: -1329.00,
       category: 'Entertainment',
       date: '2024-05-27',
       type: 'expense'
     },
     {
       id: 4,
-      description: 'Gas Station',
-      amount: -45.20,
+      description: 'Petrol',
+      amount: -3750.00,
       category: 'Transportation',
       date: '2024-05-26',
       type: 'expense'
@@ -39,7 +39,7 @@ const RecentTransactions = () => {
     {
       id: 5,
       description: 'Freelance Project',
-      amount: 800.00,
+      amount: 66400.00,
       category: 'Income',
       date: '2024-05-25',
       type: 'income'
@@ -87,7 +87,7 @@ const RecentTransactions = () => {
                   ? 'text-green-600' 
                   : 'text-red-600'
               }`}>
-                {transaction.type === 'income' ? '+' : ''}${Math.abs(transaction.amount).toFixed(2)}
+                {transaction.type === 'income' ? '+' : ''}₹{Math.abs(transaction.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </p>
             </div>
           </div>

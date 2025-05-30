@@ -6,7 +6,7 @@ const StatsCards = () => {
   const stats = [
     {
       title: 'Total Balance',
-      value: '$12,450.00',
+      value: '₹10,32,450.00',
       change: '+12.5%',
       isPositive: true,
       icon: Wallet,
@@ -14,7 +14,7 @@ const StatsCards = () => {
     },
     {
       title: 'Monthly Income',
-      value: '$8,200.00',
+      value: '₹6,80,200.00',
       change: '+8.2%',
       isPositive: true,
       icon: TrendingUp,
@@ -22,7 +22,7 @@ const StatsCards = () => {
     },
     {
       title: 'Monthly Expenses',
-      value: '$3,750.00',
+      value: '₹3,11,250.00',
       change: '-5.1%',
       isPositive: false,
       icon: TrendingDown,
@@ -30,7 +30,7 @@ const StatsCards = () => {
     },
     {
       title: 'Savings Goal',
-      value: '$4,500.00',
+      value: '₹3,73,500.00',
       change: '75%',
       isPositive: true,
       icon: DollarSign,
