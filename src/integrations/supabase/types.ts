@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bill_reminders: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          due_date: string
+          email_enabled: boolean
+          frequency: string
+          id: string
+          status: string
+          time: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          due_date: string
+          email_enabled?: boolean
+          frequency?: string
+          id?: string
+          status?: string
+          time: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          due_date?: string
+          email_enabled?: boolean
+          frequency?: string
+          id?: string
+          status?: string
+          time?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       budgets: {
         Row: {
           amount: number

@@ -4,6 +4,7 @@ import { Plus, Bell, Calendar, Clock, DollarSign, X, Mail } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
 import { useAuth } from '../../contexts/AuthContext';
 import { sendReminderEmail } from './ReminderEmailService';
+import { useToast } from '@/components/ui/use-toast';
 
 interface Reminder {
   id: string;
@@ -24,6 +25,7 @@ const RemindersWithEmail = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user) {
@@ -43,6 +45,11 @@ const RemindersWithEmail = () => {
       setReminders(data || []);
     } catch (error) {
       console.error('Error fetching reminders:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch reminders",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -82,12 +89,30 @@ const RemindersWithEmail = () => {
 
         // Send immediate email notification if enabled
         if (emailEnabled && user.email) {
-          await sendReminderEmail({
-            userEmail: user.email,
-            userName: user.user_metadata?.full_name || user.email.split('@')[0],
-            reminderTitle: title,
-            amount: parseFloat(amount),
-            dueDate
+          try {
+            await sendReminderEmail({
+              userEmail: user.email,
+              userName: user.user_metadata?.full_name || user.email.split('@')[0],
+              reminderTitle: title,
+              amount: parseFloat(amount),
+              dueDate
+            });
+            toast({
+              title: "Success",
+              description: "Reminder added and email sent successfully!",
+            });
+          } catch (emailError) {
+            console.error('Error sending email:', emailError);
+            toast({
+              title: "Reminder Added",
+              description: "Reminder added but email failed to send",
+              variant: "destructive",
+            });
+          }
+        } else {
+          toast({
+            title: "Success",
+            description: "Reminder added successfully!",
           });
         }
 
@@ -104,6 +129,11 @@ const RemindersWithEmail = () => {
         setEmailEnabled(true);
       } catch (error) {
         console.error('Error adding reminder:', error);
+        toast({
+          title: "Error",
+          description: "Failed to add reminder",
+          variant: "destructive",
+        });
       } finally {
         setIsSubmitting(false);
       }
@@ -230,8 +260,17 @@ const RemindersWithEmail = () => {
 
       if (error) throw error;
       await fetchReminders();
+      toast({
+        title: "Success",
+        description: "Reminder marked as paid",
+      });
     } catch (error) {
       console.error('Error marking reminder as paid:', error);
+      toast({
+        title: "Error",
+        description: "Failed to mark reminder as paid",
+        variant: "destructive",
+      });
     }
   };
 
@@ -244,8 +283,17 @@ const RemindersWithEmail = () => {
 
       if (error) throw error;
       await fetchReminders();
+      toast({
+        title: "Success",
+        description: "Reminder deleted successfully",
+      });
     } catch (error) {
       console.error('Error deleting reminder:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete reminder",
+        variant: "destructive",
+      });
     }
   };
 
@@ -261,10 +309,17 @@ const RemindersWithEmail = () => {
         dueDate: reminder.due_date
       });
       
-      // Show success message (you can add a toast notification here)
-      console.log('Test email sent successfully!');
+      toast({
+        title: "Success",
+        description: "Test email sent successfully!",
+      });
     } catch (error) {
       console.error('Failed to send test email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send test email",
+        variant: "destructive",
+      });
     }
   };
 
@@ -353,7 +408,7 @@ const RemindersWithEmail = () => {
                         {reminder.title}
                       </h3>
                       {reminder.email_enabled && (
-                        <Mail className="w-4 h-4 text-blue-500" title="Email reminders enabled" />
+                        <Mail className="w-4 h-4 text-blue-500" />
                       )}
                     </div>
                     <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -383,7 +438,6 @@ const RemindersWithEmail = () => {
                       <button
                         onClick={() => sendTestEmail(reminder)}
                         className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium"
-                        title="Send test email"
                       >
                         <Mail className="w-4 h-4" />
                       </button>
