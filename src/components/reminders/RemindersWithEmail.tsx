@@ -1,24 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { Plus, Bell, Calendar, Clock, DollarSign, X, Mail } from 'lucide-react';
 import { supabase } from '../../integrations/supabase/client';
 import { useAuth } from '../../contexts/AuthContext';
 import { sendReminderEmail } from './ReminderEmailService';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '../../integrations/supabase/types';
 
-interface Reminder {
-  id: string;
-  user_id: string;
-  title: string;
-  amount: number;
-  due_date: string;
-  time: string;
-  frequency: string;
-  category: string;
-  status: 'pending' | 'paid';
-  email_enabled: boolean;
-  created_at: string;
-}
+// Use the database type directly
+type Reminder = Tables<'bill_reminders'>;
 
 const RemindersWithEmail = () => {
   const [showAddModal, setShowAddModal] = useState(false);
