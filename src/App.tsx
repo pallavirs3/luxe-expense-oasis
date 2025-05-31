@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +10,7 @@ import Signup from './components/auth/Signup';
 import Dashboard from './components/dashboard/Dashboard';
 import ExpenseHistory from './components/expenses/ExpenseHistory';
 import Analytics from './components/analytics/Analytics';
-import Reminders from './components/reminders/Reminders';
+import RemindersWithEmail from './components/reminders/RemindersWithEmail';
 import Settings from './components/settings/Settings';
 import AdminPanel from './components/admin/AdminPanel';
 import Layout from './components/layout/Layout';
@@ -56,7 +55,7 @@ const App = () => (
               <Route path="/reminders" element={
                 <ProtectedRoute>
                   <Layout>
-                    <Reminders />
+                    <RemindersWithEmail />
                   </Layout>
                 </ProtectedRoute>
               } />
