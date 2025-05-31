@@ -8,7 +8,7 @@ const Settings = () => {
   const { user } = useAuth();
   
   const [profile, setProfile] = useState({
-    name: user?.name || '',
+    name: user?.user_metadata?.full_name || '',
     email: user?.email || '',
     phone: '',
     currency: 'INR',

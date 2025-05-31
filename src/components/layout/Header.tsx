@@ -8,12 +8,24 @@ const Header = () => {
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
+  const getUserDisplayName = () => {
+    return user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  };
+
+  const getUserInitial = () => {
+    const fullName = user?.user_metadata?.full_name;
+    if (fullName) {
+      return fullName.charAt(0).toUpperCase();
+    }
+    return user?.email?.charAt(0).toUpperCase() || 'U';
+  };
+
   return (
     <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Welcome back, {user?.name?.split(' ')[0]}! 👋
+            Welcome back, {getUserDisplayName().split(' ')[0]}! 👋
           </h2>
           <p className="text-slate-600 dark:text-slate-400">
             {new Date().toLocaleDateString('en-US', { 
@@ -41,12 +53,12 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
               <span className="text-white font-medium">
-                {user?.name?.charAt(0).toUpperCase()}
+                {getUserInitial()}
               </span>
             </div>
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-slate-900 dark:text-white">{user?.name}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">{user?.role}</p>
+              <p className="text-sm font-medium text-slate-900 dark:text-white">{getUserDisplayName()}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">User</p>
             </div>
           </div>
 
