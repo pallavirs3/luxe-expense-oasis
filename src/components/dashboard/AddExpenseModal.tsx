@@ -1,33 +1,81 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Calendar, DollarSign, Tag, FileText } from 'lucide-react';
+import { supabase } from '../../integrations/supabase/client';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface AddExpenseModalProps {
   onClose: () => void;
+  onExpenseAdded?: () => void;
 }
 
-const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
+interface ExpenseCategory {
+  id: string;
+  name: string;
+  icon?: string;
+  color?: string;
+}
+
+const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose, onExpenseAdded }) => {
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [notes, setNotes] = useState('');
+  const [categories, setCategories] = useState<ExpenseCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { user } = useAuth();
 
-  const categories = [
-    'Food & Dining',
-    'Transportation',
-    'Shopping',
-    'Entertainment',
-    'Bills & Utilities',
-    'Healthcare',
-    'Travel',
-    'Others'
-  ];
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('expense_categories')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your backend API
-    console.log('Adding expense:', { amount, category, date, notes });
-    onClose();
+    if (!user) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const selectedCategory = categories.find(cat => cat.id === categoryId);
+      
+      const { error } = await supabase
+        .from('expenses')
+        .insert({
+          user_id: user.id,
+          amount: parseFloat(amount),
+          category_id: categoryId,
+          category_name: selectedCategory?.name || 'Others',
+          description: description || null,
+          notes: notes || null,
+          date: date
+        });
+
+      if (error) throw error;
+
+      onExpenseAdded?.();
+      onClose();
+    } catch (error: any) {
+      setError(error.message || 'Failed to add expense');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,16 +114,31 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
               Category
             </label>
             <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
               <option value="">Select a category</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.icon} {category.name}
+                </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              Description
+            </label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="What did you spend on?"
+            />
           </div>
 
           <div>
@@ -106,19 +169,27 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ onClose }) => {
             />
           </div>
 
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3">
+              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
           <div className="flex space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              disabled={isLoading}
+              className="flex-1 py-3 px-4 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+              disabled={isLoading}
+              className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium disabled:opacity-50"
             >
-              Add Expense
+              {isLoading ? 'Adding...' : 'Add Expense'}
             </button>
           </div>
         </form>

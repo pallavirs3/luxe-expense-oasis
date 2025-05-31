@@ -9,7 +9,175 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      budgets: {
+        Row: {
+          amount: number
+          category_id: string | null
+          created_at: string
+          end_date: string
+          id: string
+          period: string | null
+          start_date: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          created_at?: string
+          end_date: string
+          id?: string
+          period?: string | null
+          start_date: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          created_at?: string
+          end_date?: string
+          id?: string
+          period?: string | null
+          start_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category_id: string | null
+          category_name: string
+          created_at: string
+          date: string
+          description: string | null
+          id: string
+          notes: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          category_name: string
+          created_at?: string
+          date: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          category_name?: string
+          created_at?: string
+          date?: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      income: {
+        Row: {
+          amount: number
+          created_at: string
+          date: string
+          description: string | null
+          id: string
+          source: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          date: string
+          description?: string | null
+          id?: string
+          source: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          date?: string
+          description?: string | null
+          id?: string
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          currency: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          currency?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          currency?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

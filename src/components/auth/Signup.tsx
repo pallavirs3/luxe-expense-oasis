@@ -11,12 +11,14 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const { signup, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -28,11 +30,14 @@ const Signup = () => {
       return;
     }
 
-    const success = await signup(name, email, password);
-    if (success) {
-      navigate('/dashboard');
+    const result = await signup(name, email, password);
+    if (result.error) {
+      setError(result.error);
     } else {
-      setError('Failed to create account');
+      setSuccess('Account created successfully! Please check your email to verify your account.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     }
   };
 
@@ -117,6 +122,12 @@ const Signup = () => {
             {error && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3">
                 <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+              </div>
+            )}
+
+            {success && (
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-3">
+                <p className="text-green-600 dark:text-green-400 text-sm">{success}</p>
               </div>
             )}
 

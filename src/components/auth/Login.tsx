@@ -16,11 +16,11 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    const success = await login(email, password);
-    if (success) {
-      navigate('/dashboard');
+    const result = await login(email, password);
+    if (result.error) {
+      setError(result.error);
     } else {
-      setError('Invalid email or password');
+      navigate('/dashboard');
     }
   };
 
@@ -96,12 +96,6 @@ const Login = () => {
                 Sign up
               </Link>
             </p>
-          </div>
-
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-            <p className="text-sm text-blue-800 dark:text-blue-400 font-medium mb-2">Demo Credentials:</p>
-            <p className="text-xs text-blue-700 dark:text-blue-300">Admin: admin@expensetracker.com / admin123</p>
-            <p className="text-xs text-blue-700 dark:text-blue-300">User: user@example.com / user123</p>
           </div>
         </div>
       </div>
